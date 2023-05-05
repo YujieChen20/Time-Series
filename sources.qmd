@@ -1,0 +1,34 @@
+---
+title: "Data Sources"
+format: html
+---
+
+## U.S. Bureau of Labor Statistics - Employment (Monthly):
+
+The U.S. Bureau of Labor Statistics (BLS) is a federal government agency that is responsible for collecting, analyzing, and disseminating information on labor market activity, working conditions, and price changes in the U.S. economy. The agency's mission is to promote and improve the economic well-being of the American people by providing accurate and timely information about the labor market and economy.
+
+::: {style="text-align:center"}
+![](employment-levels-by-ind.png)
+:::
+
+[Download Data Here!](https://www.bls.gov/charts/employment-situation/employment-levels-by-industry.htm)
+
+## U.S. Bureau of Economic Analysis - GDP (Quarterly):
+
+The U.S. Bureau of Economic Analysis (BEA) is a federal government agency that provides essential data and analysis on the performance and structure of the U.S. economy. The BEA's mission is to promote a better understanding of the U.S. economy by providing timely, relevant, and accurate economic accounts data to policymakers, businesses, and the public.
+
+::: {style="text-align:center"}
+![](fredgraph.png)
+:::
+
+[Download Data Here!](https://fred.stlouisfed.org/series/GDP#)
+
+## U.S. Bureau of Economic Analysis - Interest Rate (Monthly):
+
+Interest rates are a fundamental component of the global financial system, playing a crucial role in determining the cost of borrowing and the returns on investments. An interest rate is the amount charged, expressed as a percentage of the principal, by a lender to a borrower for the use of their funds. Interest rates can be set by central banks, commercial banks, or other financial institutions, and can vary depending on a range of factors, such as the state of the economy, inflation, and risk.
+
+::: {style="text-align:center"}
+![](fredgraph_ir.png)
+:::
+
+[Download Data Here!](https://fred.stlouisfed.org/series/REAINTRATREARAT10Y#)

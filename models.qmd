@@ -1,0 +1,327 @@
+---
+title: "ARMA/ARIMA/SARIMA Models"
+format: html
+---
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(forecast)
+library(astsa) 
+library(xts)
+library(tseries)
+library(fpp2)
+library(fma)
+library(lubridate)
+library(tidyverse)
+library(TSstudio)
+library(quantmod)
+library(tidyquant)
+library(plotly)
+library(ggplot2)
+library(readxl)
+```
+
+```{r echo=FALSE, message=FALSE}
+ts <- read_excel("data/employment.xlsx")
+
+start_date <- c(2003, 3)
+end_date <- c(2023, 3)
+frequency <- 12
+emp_ts <- ts(
+  ts %>%
+    select(Information), 
+  start = start_date, 
+  end = end_date, 
+  frequency = frequency)
+```
+
+## Stationarity
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+emp_ts <- log(emp_ts)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+require(gridExtra)
+
+plot2 <- autoplot(diff(emp_ts), main="First Difference") 
+plot4 <- ggAcf(as.numeric(diff(emp_ts)), 48, main="First Difference (ACF)")
+plot5 <- autoplot(diff(diff(emp_ts)), main="Second Difference") 
+plot6 <- ggAcf(as.numeric(diff(diff(emp_ts))), 48, main="Second Difference (ACF)")
+plot7 <- autoplot(diff(diff(diff(emp_ts))), main="Third Difference") 
+plot8 <- ggAcf(as.numeric(diff(diff(diff(emp_ts)))), 48, main="Third Difference (ACF)")
+
+grid.arrange(plot2, plot4, plot5, plot6, plot7, plot8, nrow = 3)
+```
+
+First difference works well for my data set, the second and third difference may cause over differencing.
+
+```{r echo=FALSE, warning=FALSE}
+adf.test(diff(emp_ts))
+```
+
+P-value is smaller than 0.05. We have enough evidence to reject the null hypothesis at 5% significance level. So the ADF test thought the series is stationary.
+
+## ACF/PACF
+
+```{r echo=FALSE}
+emp_ts_transformed <-
+  emp_ts %>%
+  diff() %>%
+  ggtsdisplay()
+```
+
+p = 1; q = 1
+
+## ARIMA Model Fitting
+
+```{r echo=FALSE}
+d = 1
+i = 1
+temp = data.frame()
+ls = matrix(rep(NA,6*10),nrow=10) 
+
+
+for (p in 2:4)# p=1,2,3 : 3
+{
+  for(q in 2:4)# q=1,2,3 : 3
+  {
+    if(p-1+d+q-1<=8)
+    {
+      model<- Arima(emp_ts, order=c(p-1,d,q-1)) 
+      ls[i,] = c(p-1,d,q-1,model$aic,model$bic,model$aicc)
+      i=i+1
+    }
+  }
+}
+
+temp= as.data.frame(ls)
+names(temp)= c("p","d","q","AIC","BIC","AICc")
+
+#temp
+knitr::kable(temp)
+```
+
+```{r echo=FALSE}
+temp[which.min(temp$AIC),] 
+temp[which.min(temp$BIC),]
+temp[which.min(temp$AICc),]
+```
+
+AIC, BIC, AICc suggest ARIMA(1, 1, 1) is the best model.
+
+```{r echo=FALSE}
+fit = Arima(emp_ts, order=c(1,1,1))
+summary(fit)
+```
+
+Equation:
+
+$$x_t = 2.24x_{t-1} - 0.73x_{t-2} - 1.27x_{t-3} + 0.76x_{t-4} + w_t - 2.96w_{t-1} + 2.96w_{t-2} - w_{t-3}$$
+
+## Model Diagnostic
+
+```{r echo=FALSE}
+model_output <- capture.output(sarima(emp_ts, 1, 1, 1))
+```
+
+From the model diagnostic chart above, we can observe that the standardized residuals are similar to white noise, except there's a huge drop in employment during 2020. Also, both the p-value for Ljung-Box statistics and the ACF of residuals all falls within the confidence interval. We could say that the ARIMA(1, 1, 1) model fits the data set well!
+
+## auto.arima
+
+```{r echo=FALSE}
+auto.arima(emp_ts)
+```
+
+The result from auto.arima function is different. However, I'm pretty condident about my model above since AIC, AICc, and BIC have a relatively low value comparing to the model suggested by auto.arima function.
+
+## Forecast
+
+```{r echo=FALSE}
+fit %>% 
+  forecast(h=36) %>% #next 3 years
+  autoplot()
+```
+
+we get a reasonable forecast, however, we should try SARIMA model as well.
+
+## Benchmark Method Comparison
+
+```{r echo=FALSE}
+autoplot(emp_ts) +
+  autolayer(meanf(emp_ts, h=36),
+            series="Mean", PI=FALSE) +
+  autolayer(naive(emp_ts, h=36),
+            series="Naïve", PI=FALSE) +
+  autolayer(snaive(emp_ts, h=36),
+            series="SNaïve", PI=FALSE)+
+  autolayer(rwf(emp_ts, h=36, drift=TRUE),
+            series="Drift", PI=FALSE)+
+  autolayer(forecast(fit, 36), 
+            series="fit", PI=FALSE) +
+  guides(colour=guide_legend(title="Forecast"))
+```
+
+```{r echo=FALSE}
+accuracy(fit, h = 36) 
+accuracy(meanf(emp_ts, h=36))
+accuracy(naive(emp_ts, h=36))
+accuracy(snaive(emp_ts, h=36))
+accuracy(rwf(emp_ts, h=36))
+```
+
+Both the viz and accuracy metric suggest my model is better than those benchmark methods.
+
+## SARIMA Model Fitting
+
+Since the employment data set I'm using doesn't not contain seasonality as it's seasonal adjusted. So, I would use real interest rate data set as the source data for SARIMA model since interest rate is related to the employment.
+
+```{r echo=FALSE, message=FALSE}
+ir <- read_csv("data/REAINTRATREARAT10Y.csv")
+
+start_date <- c(1982, 1)
+end_date <- c(2023, 3)
+frequency <- 12
+
+ir_ts <- ts(
+  ir %>%
+    select(REAINTRATREARAT10Y), 
+  start = start_date, 
+  end = end_date, 
+  frequency = frequency)
+```
+
+```{r}
+ir_ts %>%
+  decompose(type = c("additive", "multiplicative")) %>%
+  autoplot()
+```
+
+```{r echo=FALSE, message=FALSE}
+ir_ts %>%
+  diff() %>%
+  diff(lag=12) %>%
+  ggtsdisplay()
+```
+
+After ordinary and seasonal differencing, we can tell that p should be 0, d should be 1, q should be 0, P should be 1, D should be 1, Q should be 1, 2, 3
+
+```{r echo=FALSE, message=FALSE}
+temp=c()
+d=1
+D=1
+s=12
+  
+i=1
+temp= data.frame()
+ls=matrix(rep(NA,9*14),nrow=14)
+  
+for (p in 1:3){
+  for(q in 1:3){
+    for(P in 2:3){
+      for(Q in 2:4){
+        if(p+d+q+P+D+Q<=10){
+          
+          model<- Arima(ir_ts, order=c(p-1,d,q-1), seasonal=c(P-1,D,Q-1))
+          ls[i,]= c(p-1, d, q-1, P-1, D, Q-1, model$aic,model$bic, model$aicc)
+          i=i+1
+            
+          }
+        }
+      }
+    }
+  }
+  
+temp= as.data.frame(ls)
+names(temp)= c("p","d","q","P","D","Q","AIC","BIC","AICc")
+temp
+```
+
+```{r echo=FALSE, message=FALSE}
+temp[which.min(temp$AIC),] 
+temp[which.min(temp$BIC),]
+temp[which.min(temp$AICc),]
+```
+
+The AIC, BIC, AICc scores all suggests SARIMA(0, 1, 0) \* (1, 1, 1) model.
+
+```{r echo=FALSE}
+fit2 = Arima(ir_ts, order=c(0,1,0), seasonal=c(1,1,1))
+summary(fit2)
+```
+
+## Forecast
+
+```{r echo=FALSE}
+fit2 %>% 
+  forecast(h=36) %>% #next 3 years
+  autoplot()
+```
+
+## Benchmark Method Comparison
+
+```{r echo=FALSE}
+autoplot(ir_ts) +
+  autolayer(meanf(ir_ts, h=36),
+            series="Mean", PI=FALSE) +
+  autolayer(naive(ir_ts, h=36),
+            series="Naïve", PI=FALSE) +
+  autolayer(snaive(ir_ts, h=36),
+            series="SNaïve", PI=FALSE)+
+  autolayer(rwf(ir_ts, h=36, drift=TRUE),
+            series="Drift", PI=FALSE)+
+  autolayer(forecast(fit2, 36), 
+            series="fit", PI=FALSE) +
+  guides(colour=guide_legend(title="Forecast"))
+```
+
+```{r echo=FALSE}
+accuracy(fit2, h = 36) 
+accuracy(meanf(ir_ts, h=36))
+accuracy(naive(ir_ts, h=36))
+accuracy(snaive(ir_ts, h=36))
+accuracy(rwf(ir_ts, h=36))
+```
+
+Both the viz and accuracy metric suggest my model is better than those benchmark methods.
+
+## Cross Validation
+
+### 1 step ahead
+
+```{r echo=FALSE, message=FALSE}
+set.seed(133)
+farima <- function(x, h){forecast(fit2, h=h)}
+(e <- tsCV(ir_ts, farima, h=1))
+```
+
+MAE
+
+```{r echo=FALSE, message=FALSE}
+(MAE <- abs(mean(e,na.rm=TRUE))) # SARIMA(0, 1, 0) * (1, 1, 1) 
+```
+
+### 12 steps ahead
+
+```{r echo=FALSE, warning=FALSE}
+#n-k=351; 351/12=29; k=144
+k = 144
+n = length(ir_ts)
+mae <- matrix(NA, (n - k) / 12, 12)
+
+st <- tsp(log(ir_ts))[1]+(k-1)/12 #144 observations
+
+for(i in 1:((n-k)/12)){
+  xtrain <- window(log(ir_ts), end=st+i-1)
+  xtest <- window(log(ir_ts), start=st+(i-1)+1/12, end=st+i)
+  
+  fit1 <- Arima(xtrain, order=c(0,1,0), seasonal=list(order=c(1,1,1), period=12), method="ML")
+  fcast1 <- forecast(fit1, h=12)
+  
+  mae[i,] <- abs(fcast1$mean-xtest)
+}
+
+plot(1:12, colMeans(mae,na.rm=TRUE), type="l", col=2, xlab="horizon", ylab="MAE")
+legend("topleft",legend=c("SARIMA(0,1,0)x(1,1,1)"), col=2:4, lty=1)
+```

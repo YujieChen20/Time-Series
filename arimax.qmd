@@ -1,0 +1,298 @@
+---
+title: "SARIMAX"
+format: html
+---
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(forecast)
+library(astsa) 
+library(xts)
+library(tseries)
+library(fpp2)
+library(fma)
+library(lubridate)
+library(tidyverse)
+library(TSstudio)
+library(quantmod)
+library(tidyquant)
+library(plotly)
+library(ggplot2)
+library(readxl)
+```
+
+## Literature Review
+
+The followings are quantitative influential factors of the US employment:
+
+1.  Gross Domestic Product (GDP): As mentioned earlier, GDP is a key indicator of economic growth and is strongly correlated with employment levels. A higher GDP generally indicates a stronger economy, which can create new job opportunities as businesses expand and invest in new projects.
+
+2.  Unemployment rate: The unemployment rate measures the percentage of the labor force that is currently unemployed. A higher unemployment rate indicates a weaker job market, while a lower unemployment rate suggests a stronger job market. However, it is important to note that the unemployment rate can be influenced by factors such as labor force participation rates, which can complicate its interpretation.
+
+3.  Labor force participation rate: The labor force participation rate measures the percentage of the working-age population that is either employed or actively seeking employment. A higher labor force participation rate generally indicates a stronger job market, as more people are actively seeking work.
+
+4.  Consumer spending: Consumer spending is an important driver of economic growth, and can create job opportunities in industries such as retail and hospitality. A higher level of consumer spending generally indicates a stronger economy, which can create new job opportunities.
+
+5.  Business investment: Business investment is another important driver of economic growth, as it can create new job opportunities in industries such as manufacturing and construction. A higher level of business investment generally indicates a stronger economy, which can lead to increased employment levels.
+
+6.  Trade balance: The trade balance measures the difference between the value of a country's exports and imports. A trade deficit (where imports exceed exports) can create job losses in certain industries, while a trade surplus (where exports exceed imports) can create job gains in certain industries.
+
+7.  Interest rates: Interest rates can influence the availability of credit for businesses and individuals, which can impact investment and spending decisions. Higher interest rates can make borrowing more expensive, which can reduce business investment and consumer spending, potentially leading to job losses. Conversely, lower interest rates can stimulate borrowing, investment, and spending, potentially creating new job opportunities.
+
+After literature review of what quantitative factor would influence the US employment, I decided to use interest rates and GDP as exogenous variables and the employment as response variable to fit an ARIMAX model.
+
+## Plot the Original Data
+
+```{r echo=FALSE, message=FALSE}
+gdp <- read.csv('data/GDP.csv')
+employment <- read_excel('data/employment.xlsx')
+ir <- read_csv("data/REAINTRATREARAT10Y.csv")
+```
+
+```{r echo=FALSE}
+dd <- gdp %>%
+  mutate(DATE = as.Date(DATE)) %>%
+  inner_join(employment, by = c('DATE' = 'Month')) %>%
+  select(DATE, GDP, Information) %>%
+  inner_join(ir, by = 'DATE') %>%
+  rename(`Interest Rate` = REAINTRATREARAT10Y, `Information Employment` = Information)
+knitr::kable(head(dd))
+write.csv(dd, 'data/data.csv')
+```
+
+```{r echo=FALSE}
+dd.ts <- ts(dd, star=decimal_date(as.Date("2003-04-01",format = "%Y-%m-%d")), frequency = 4)
+
+autoplot(dd.ts[,c(2:4)], facets=TRUE) +
+  xlab("Year") + ylab("") +
+  ggtitle("Variables influencing Information Employment in USA")
+```
+
+## Fit the model using 'auto.arima()\`
+
+```{r echo=FALSE}
+xreg <- cbind(gdp = dd.ts[, "GDP"],
+              ir = dd.ts[, "Interest Rate"])
+
+fit <- auto.arima(dd.ts[, "Information Employment"], xreg = xreg)
+summary(fit)
+```
+
+```{r echo=FALSE}
+checkresiduals(fit)
+```
+
+## Fit the model manually
+
+### First fit the linear model:
+
+```{r echo=FALSE}
+dd$GDP <- ts(dd$GDP, star=decimal_date(as.Date("2003-04-01", format = "%Y-%m-%d")), frequency = 4)
+dd$`Information Employment` <- ts(dd$`Information Employment`, star=decimal_date(as.Date("2003-04-01",format = "%Y-%m-%d")),frequency = 4)
+dd$`Interest Rate` <- ts(dd$`Interest Rate`, star=decimal_date(as.Date("2003-04-01", format = "%Y-%m-%d")), frequency = 4)
+
+############# First fit the linear model##########
+fit.reg <- lm(`Information Employment` ~ GDP + `Interest Rate`, data=dd)
+summary(fit.reg)
+```
+
+### Then, look at the residuals
+
+#### Without Difference
+
+```{r echo=FALSE}
+res.fit <- ts(residuals(fit.reg), star=decimal_date(as.Date("2003-04-01", format = "%Y-%m-%d")), frequency = 4)
+
+############## Then look at the residuals ############
+res.fit %>%
+  ggtsdisplay()
+```
+
+#### Ordinary Difference
+
+```{r echo=FALSE}
+res.fit %>% 
+  diff() %>% 
+  ggtsdisplay()
+```
+
+#### Ordinary Difference & Seasonal Difference
+
+```{r echo=FALSE}
+res.fit %>% 
+  diff() %>% 
+  diff(4) %>%
+  ggtsdisplay()
+```
+
+### Find the model parameters.
+
+```{r echo=FALSE}
+#q=1,2 Q=1 , p=1,2, P=1,2
+#write a funtion
+SARIMA.c=function(p1,p2,q1,q2,P1,P2,Q1,Q2,d1,d2,data){
+  temp=c()
+  d=1
+  D=1
+  s=12
+  i=1
+  temp= data.frame()
+  ls=matrix(rep(NA,9*42),nrow=42)
+  
+  
+  for (p in p1:p2)
+  {
+    for(q in q1:q2)
+    {
+      for(P in P1:P2)
+      {
+        for(Q in Q1:Q2)
+        {
+          for(d in d1:d2)
+       
+        {
+          if(p+d+q+P+D+Q<=8)
+          {
+            
+            model<- Arima(data,order=c(p-1,d,q-1),seasonal=c(P-1,D,Q-1))
+            ls[i,]= c(p-1,d,q-1,P-1,D,Q-1,model$aic,model$bic,model$aicc)
+            i=i+1
+            #print(i)
+            
+          }
+          
+        }
+      }
+    }
+    
+  }
+  
+  }
+  temp= as.data.frame(ls)
+  names(temp)= c("p","d","q","P","D","Q","AIC","BIC","AICc")
+  
+  temp
+  
+}
+
+##q=1,3 Q=1 , p=1,2, P=1,2 d=0,1 
+
+output=SARIMA.c(p1=1,p2=3,q1=1,q2=3,P1=1,P2=3,Q1=1,Q2=2,d1=0,d2=1,data=res.fit)
+output
+```
+
+```{r echo=FALSE}
+output[which.min(output$AIC),] 
+output[which.min(output$BIC),]
+output[which.min(output$AICc),]
+```
+
+Best models: SARIMA(0,1,0)x(0,1,1)\[4\], auto.arima suggested: SARIMA(0,0,2)(0,0,2)\[4\]
+
+## Model Comparison
+
+### Model Diagnositic
+
+#### SARIMA(0,1,0)x(0,1,1)\[4\] from Manual Fitting
+
+```{r echo=FALSE}
+set.seed(1234)
+model_output12 <- capture.output(sarima(res.fit, 0,1,0, 0,1,1,4)) 
+```
+
+#### SARIMA(0,0,2)x(0,0,2)\[4\] from `auto.arima()`
+
+```{r echo=FALSE}
+model_output13 <- capture.output(sarima(res.fit, 0,0,2, 0,0,2,4)) 
+```
+
+SARIMA(0,1,0)x(0,1,1)\[4\] is better
+
+### Cross Validation
+
+```{r echo=FALSE}
+n=length(res.fit)
+k=27
+ 
+ #n-k=52; 52/4=13;
+ 
+rmse1 <- matrix(NA, 13,4)
+rmse2 <- matrix(NA,13,4)
+
+st <- tsp(res.fit)[1]+(k-1)/4 
+
+for(i in 1:13)
+{
+  #xtrain <- window(a10, start=st+(i-k+1)/12, end=st+i/12)
+  xtrain <- window(res.fit, end=st + i-1)
+  xtest <- window(res.fit, start=st + (i-1) + 1/4, end=st + i)
+  
+  #ARIMA(0,1,1)x(0,1,1)[4] ARIMA(0,1,0)(2,0,0)[4]
+  
+  fit <- Arima(xtrain, order=c(0,1,0), seasonal=list(order=c(0,1,1), period=4),method="ML")
+  fcast <- forecast(fit, h=4)
+  
+  fit2 <- Arima(xtrain, order=c(0,0,2), seasonal=list(order=c(0,0,2), period=4),method="ML")
+  fcast2 <- forecast(fit2, h=4)
+  
+
+  rmse1[i,1:length(xtest)]  <- sqrt((fcast$mean-xtest)^2)
+  rmse2[i,1:length(xtest)] <- sqrt((fcast2$mean-xtest)^2)
+  
+}
+
+plot(1:4, colMeans(rmse1,na.rm=TRUE), type="l", col=2, xlab="horizon", ylab="RMSE")
+lines(1:4, colMeans(rmse2,na.rm=TRUE), type="l",col=3)
+legend("topleft",legend=c("SARIMA(0,1,0)x(0,1,1)","SARIMA(0,0,2)x(0,0,2)"),col=2:4,lty=1)
+```
+
+```{r echo=FALSE}
+colMeans( rmse1,na.rm=TRUE)
+colMeans( rmse2,na.rm=TRUE)
+```
+
+SARIMA(0,1,0)x(0,1,1)\[4\] is better based on low RMSE
+
+## Best Model Fitting
+
+```{r echo=FALSE}
+fit <- Arima(dd$`Information Employment`, order=c(0,1,0),seasonal = c(0, 1,1),xreg=xreg)
+summary(fit)
+```
+
+## Forcast
+
+### Use `auto.arima()` to forcast the exogenous variables
+
+#### GDP
+
+```{r echo=FALSE}
+gdp_fit <- auto.arima(dd$GDP) #fiting an ARIMA model to the Export variable
+summary(gdp_fit) 
+fgdp <- forecast(gdp_fit)
+```
+
+#### Interest Rate
+
+```{r echo=FALSE}
+ir_fit <- auto.arima(dd$`Interest Rate`) #fiting an ARIMA model to the Export variable
+summary(ir_fit) 
+fir <- forecast(ir_fit)
+```
+
+### Forecast with exogenous variables
+
+```{r echo=FALSE}
+fxreg <- cbind(gdp = fgdp$mean,
+              ir = fir$mean)
+
+fcast <- forecast(fit, xreg=fxreg) #fimp$mean gives the forecasted values
+autoplot(fcast) + 
+  xlab("Year") +
+  ylab("Information Employment")
+```
+
+## Results and Findings
+
+We could observe that SARIMA and SARIMAX models give us similar trajectory. When the exogenous variable is included, we have a tight confidence interval. That means the SARIMAX model is more precise.

@@ -1,0 +1,31 @@
+---
+title: "Introduction"
+format: html
+---
+
+## IMPACT OF MACROECONOMIC FACTORS ON EMPLOYMENT MARKET
+
+::: {style="text-align:center"}
+![](employment.jpeg)
+:::
+
+Employment trends in the United States are a crucial aspect of the country's economic and social landscape. The complex and dynamic nature of employment data necessitates a sophisticated approach to data analysis, and time series analysis is a powerful tool that can provide valuable insights into historical trends and future projections. In this research project, we aim to apply time series analysis techniques to United States employment data, with the goal of identifying key patterns, trends, and relationships between various economic and demographic factors.
+
+The scope of this research project encompasses a wide range of employment-related data, including job creation and job loss across various industries, demographic factors such as age, gender, and education level, and the overall unemployment rate. The research project will leverage a variety of statistical techniques and models, including regression analysis, time series decomposition, and forecasting methods.
+
+The insights gained from this research project could have significant implications for policymakers, employers, and job seekers. By understanding historical employment trends and predicting future employment patterns, policymakers can develop more effective policies to promote job growth and reduce unemployment. Employers can use this information to anticipate changes in the labor market and adapt their hiring practices accordingly, while job seekers can make more informed decisions about their education and career paths.
+
+Overall, this research project will provide a comprehensive analysis of United States employment trends, and will contribute to our understanding of the complex dynamics of the American labor market. By applying sophisticated time series analysis techniques to this rich and diverse dataset, we aim to shed new light on the challenges and opportunities facing the United States economy in the coming years.
+
+### Research Questions:
+
+1.  What are the historical trends in job creation and job loss across different industries in the United States, and how have these trends changed over time?
+2.  How do demographic factors such as age, gender, and education level impact employment rates in the United States, and what are the long-term trends in these relationships?
+3.  What factors contribute to fluctuations in the unemployment rate in the United States, and how can policymakers use this information to create more stable employment conditions?
+4.  How can we forecast future employment trends in the United States, based on historical data and demographic factors?
+5.  What are the key economic indicators that are most strongly correlated with changes in employment rates in the United States, and how have these relationships evolved over time?
+6.  How does the seasonal nature of employment trends in certain industries impact the overall labor market in the United States, and what are the most effective strategies for managing these seasonal fluctuations?
+7.  What are the long-term trends in job polarization and income inequality in the United States, and how do these trends impact different demographic groups?
+8.  How can we use machine learning and artificial intelligence techniques to enhance our understanding of employment trends in the United States, and to develop more accurate forecasting models?
+9.  What is the impact of technological change on employment trends in the United States, and how can policymakers and employers respond to these changes to promote job growth and stability?
+10. What are the most effective strategies for promoting workforce development and training in the United States, and how can we use time series analysis to evaluate the effectiveness of different training programs and initiatives?

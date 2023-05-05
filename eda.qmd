@@ -1,0 +1,141 @@
+---
+title: "Exploratory Data Analysis"
+format: html
+---
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(forecast)
+library(astsa) 
+library(xts)
+library(tseries)
+library(fpp2)
+library(fma)
+library(lubridate)
+library(tidyverse)
+library(TSstudio)
+library(quantmod)
+library(tidyquant)
+library(plotly)
+library(ggplot2)
+library(readxl)
+```
+
+## Original Time Series
+
+```{r echo=FALSE, message=FALSE}
+library(tidyverse)
+emp <- read_excel("data/employment.xlsx")
+
+start_date <- c(2003, 3)
+end_date <- c(2023, 3)
+frequency <- 12
+emp_ts <- ts(
+  emp %>%
+    select(`Total nonfarm`), 
+  start = start_date, 
+  end = end_date, 
+  frequency = frequency)
+```
+
+```{r echo=FALSE, message=FALSE}
+emp_ts %>%
+  autoplot(
+    main = "U.S. Employment in Information Sector from 2003 to 2023") +
+  xlab("") +
+  ylab("Employment")
+```
+
+In the early 2000s, the information sector was growing very fast, with employment increasing rapidly due to the growth of the internet and related technologies. Since then, the information sector has experienced a mixed employment performance. Between 2003 and 2007, employment in the sector increased moderately. However, the Great Recession of 2008-2009 led to significant job losses in the sector, with employment falling sharply from 2008 to 2010.
+
+Since then, employment in the information sector has been gradually recovering. From 2010 to 2019, employment in the sector increased by an average of 2.3% annually, outpacing the overall employment growth in the US economy. During this time, the software and computer services sub-sector has been the fastest-growing within the information sector, driven by increased demand for cloud computing and other software-related services.
+
+However, the COVID-19 pandemic has had a mixed impact on employment in the information sector. While some sub-sectors, such as software development and online content creation, have seen increased demand and employment growth during the pandemic, others, such as publishing and broadcasting, have seen significant job losses due to disruptions in advertising revenue and other factors.
+
+## Lag Plot
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+gglagplot(emp_ts, do.lines=FALSE, set.lags = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 24, 36, 48, 60)) +
+  xlab("Lags") +
+  ylab("Yi") +
+  ggtitle("Lag Plot for U.S. Employment in the Information Sector") +
+  theme(axis.text.x=element_text(angle=90))
+```
+
+From those lag plots, we can observe only lag 1, 12, 24, 36, 48, 60 are correlated which means there is seasonal correlation. However, other lag plots aren't correlated.
+
+## Decomposition
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+emp_ts %>%
+  decompose(., "multiplicative") %>%
+  autoplot() 
+```
+
+Similar to the result above, we could observed an upward trend in the U.S. employment data set. However, there's fluctuation in 2008 & 2019.
+
+## ACF and PACF
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+require(gridExtra)
+p1 <- ggAcf(emp_ts, main = "ACF Plot")
+p2 <- ggPacf(emp_ts, main = "PACF Plot")
+grid.arrange(p1, p2)
+```
+
+By looking at the ACF, it can be concluded that the series is not Stationary. In this graph lag1, lag12, lag 24 is higher than for the other lags. This is due to the seasonal pattern in the data, the peaks tend to be 12 months apart and the troughs tend to be 12 months apart as well. Since the dashed blue lines indicate whether the correlations are significantly different from zero. Most of the lage exceed the dashed blue line, so that the data isn't stationary.
+
+## Augmented Dickey-Fuller Test
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+adf.test(emp_ts)
+```
+
+P-value is larger than 0.05. We don't have enough evidence to reject the null hypothesis at 5% significance level. So the ADF test thought the series is not stationary. This result supports the result from ACF and PACF plot.
+
+## Make Data Stationary
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+y=emp_ts
+x=time(emp_ts)
+DD<-data.frame(x,y)
+ggp <- ggplot(DD, aes(x, y)) +           
+  geom_line()
+
+ggp +                                     
+  stat_smooth(method = "lm",
+              formula = y ~ x,
+              geom = "smooth") +
+  ggtitle("U.S.Employment in Information Sector from 2003 to 2023") +
+  ylab("Employment") +
+  xlab("Date")
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+fit = lm(emp_ts ~ time(emp_ts), na.action=NULL) 
+plot1 <- autoplot(resid(fit), main="Detrended") 
+plot2 <- autoplot(diff(emp_ts), main="First Difference") 
+plot3 <- ggAcf(as.numeric(resid(fit)), 48, main="Detrended (ACF)") 
+plot4 <- ggAcf(as.numeric(diff(emp_ts)), 48, main="First Difference (ACF)")
+plot5 <- autoplot(diff(diff(emp_ts)), main="Second Difference") 
+plot6 <- ggAcf(as.numeric(diff(diff(emp_ts))), 48, main="Second Difference (ACF)")
+
+grid.arrange(plot1, plot3, plot2, plot4, plot5, plot6, nrow = 3)
+
+```
+
+From the line plot and ACF plot, we can observe that the result of taking first & second order differential transformation is much better than the result of detrending. The original chart shows the data set is much more stationary since the mean and variance is approximately constant. Also, from the ACF chart we could observe most of the correlation are within the range.
+
+## Moving Average Smoothing
+
+```{r warning=FALSE}
+autoplot(emp_ts) +
+  autolayer(ma(emp_ts,12), series="12-MA") +
+  autolayer(ma(emp_ts,36), series="36-MA") +
+  autolayer(ma(emp_ts,120), series="120-MA") +
+  xlab("Date") + ylab("Employment") +
+  ggtitle("Moving Average Smoothing of U.S. Employment")
+```
+
+Using 12, 36, 120 MA window indicates there's an upward trend in the NBA Web Search data set.

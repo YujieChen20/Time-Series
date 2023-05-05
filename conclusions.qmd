@@ -1,0 +1,14 @@
+---
+title: "Conclusions"
+format: html
+---
+
+In conclusion, our time series analysis of US employment using factors including GDP and interest rates revealed several key insights.
+
+Firstly, we found that employment in the US has generally followed a positive trend over the period analyzed, with some periods of significant growth and others of decline. The financial crisis of 2008-2009 had a significant impact on employment, leading to job losses across many industries.
+
+Secondly, we found that GDP has a significant impact on employment, with positive GDP growth generally associated with increases in employment. However, the relationship between GDP and employment is complex and can be influenced by a range of other factors, such as technological change and shifts in consumer behavior.
+
+Finally, we found that interest rates also play an important role in employment, with lower interest rates generally associated with increased employment. This suggests that monetary policy can be an important tool for promoting employment growth in the US.
+
+Overall, our analysis highlights the importance of considering multiple factors when analyzing employment trends in the US, including both macroeconomic factors such as GDP and interest rates and sector-specific factors such as industry trends and technological change. By taking a comprehensive approach to analyzing employment trends, policymakers and businesses can gain a deeper understanding of the drivers of employment growth and develop strategies to promote long-term job growth and economic stability.

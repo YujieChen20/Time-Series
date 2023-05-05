@@ -1,0 +1,34 @@
+project:
+  type: website
+
+website:
+  title: IMPACT OF MACROECONOMIC FACTORS ON EMPLOYMENT MARKET
+  sidebar:
+    style: "docked"
+    search: true
+    contents:
+      - href: index.qmd
+        text: Home
+      - about.qmd
+      - introduction.qmd
+      - sources.qmd
+      - viz.qmd
+      - eda.qmd
+      - models.qmd
+      - arimax.qmd
+      - financial.qmd
+      - deepLearning.ipynb
+      - conclusions.qmd
+  navbar:
+    tools:
+      - icon: twitter
+        href: https://twitter.com
+
+format:
+  html:
+    theme: sketchy
+    css: styles.css
+    toc: true
+
+editor: visual
+

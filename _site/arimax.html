@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Time Series - SARIMAX</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Time Series</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./about.html">
+ <span class="menu-text">About Yujie</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./introduction.html">
+ <span class="menu-text">Introduction</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./sources.html">
+ <span class="menu-text">Data Sources</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./viz.html">
+ <span class="menu-text">Data Visualization</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./eda.html">
+ <span class="menu-text">Exploratory Data Analysis</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./models.html">
+ <span class="menu-text">ARMA/ARIMA/SARIMA Models</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./arimax.html" aria-current="page">
+ <span class="menu-text">SARIMAX</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./financial.html">
+ <span class="menu-text">Financial Time Series Models</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./deepLearning.html">
+ <span class="menu-text">Deep Learning for Time Series</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./conclusions.html">
+ <span class="menu-text">Conclusions</span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#literature-review" id="toc-literature-review" class="nav-link active" data-scroll-target="#literature-review">Literature Review</a></li>
+  <li><a href="#plot-the-original-data" id="toc-plot-the-original-data" class="nav-link" data-scroll-target="#plot-the-original-data">Plot the Original Data</a></li>
+  <li><a href="#fit-the-model-using-auto.arima" id="toc-fit-the-model-using-auto.arima" class="nav-link" data-scroll-target="#fit-the-model-using-auto.arima">Fit the model using ’auto.arima()`</a></li>
+  <li><a href="#fit-the-model-manually" id="toc-fit-the-model-manually" class="nav-link" data-scroll-target="#fit-the-model-manually">Fit the model manually</a>
+  <ul class="collapse">
+  <li><a href="#first-fit-the-linear-model" id="toc-first-fit-the-linear-model" class="nav-link" data-scroll-target="#first-fit-the-linear-model">First fit the linear model:</a></li>
+  <li><a href="#then-look-at-the-residuals" id="toc-then-look-at-the-residuals" class="nav-link" data-scroll-target="#then-look-at-the-residuals">Then, look at the residuals</a></li>
+  <li><a href="#find-the-model-parameters." id="toc-find-the-model-parameters." class="nav-link" data-scroll-target="#find-the-model-parameters.">Find the model parameters.</a></li>
+  </ul></li>
+  <li><a href="#model-comparison" id="toc-model-comparison" class="nav-link" data-scroll-target="#model-comparison">Model Comparison</a>
+  <ul class="collapse">
+  <li><a href="#model-diagnositic" id="toc-model-diagnositic" class="nav-link" data-scroll-target="#model-diagnositic">Model Diagnositic</a></li>
+  <li><a href="#cross-validation" id="toc-cross-validation" class="nav-link" data-scroll-target="#cross-validation">Cross Validation</a></li>
+  </ul></li>
+  <li><a href="#best-model-fitting" id="toc-best-model-fitting" class="nav-link" data-scroll-target="#best-model-fitting">Best Model Fitting</a></li>
+  <li><a href="#forcast" id="toc-forcast" class="nav-link" data-scroll-target="#forcast">Forcast</a>
+  <ul class="collapse">
+  <li><a href="#use-auto.arima-to-forcast-the-exogenous-variables" id="toc-use-auto.arima-to-forcast-the-exogenous-variables" class="nav-link" data-scroll-target="#use-auto.arima-to-forcast-the-exogenous-variables">Use <code>auto.arima()</code> to forcast the exogenous variables</a></li>
+  <li><a href="#forecast-with-exogenous-variables" id="toc-forecast-with-exogenous-variables" class="nav-link" data-scroll-target="#forecast-with-exogenous-variables">Forecast with exogenous variables</a></li>
+  </ul></li>
+  <li><a href="#results-and-findings" id="toc-results-and-findings" class="nav-link" data-scroll-target="#results-and-findings">Results and Findings</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">SARIMAX</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="cell">
+
+</div>
+<section id="literature-review" class="level2">
+<h2 class="anchored" data-anchor-id="literature-review">Literature Review</h2>
+<p>The followings are quantitative influential factors of the US employment:</p>
+<ol type="1">
+<li><p>Gross Domestic Product (GDP): As mentioned earlier, GDP is a key indicator of economic growth and is strongly correlated with employment levels. A higher GDP generally indicates a stronger economy, which can create new job opportunities as businesses expand and invest in new projects.</p></li>
+<li><p>Unemployment rate: The unemployment rate measures the percentage of the labor force that is currently unemployed. A higher unemployment rate indicates a weaker job market, while a lower unemployment rate suggests a stronger job market. However, it is important to note that the unemployment rate can be influenced by factors such as labor force participation rates, which can complicate its interpretation.</p></li>
+<li><p>Labor force participation rate: The labor force participation rate measures the percentage of the working-age population that is either employed or actively seeking employment. A higher labor force participation rate generally indicates a stronger job market, as more people are actively seeking work.</p></li>
+<li><p>Consumer spending: Consumer spending is an important driver of economic growth, and can create job opportunities in industries such as retail and hospitality. A higher level of consumer spending generally indicates a stronger economy, which can create new job opportunities.</p></li>
+<li><p>Business investment: Business investment is another important driver of economic growth, as it can create new job opportunities in industries such as manufacturing and construction. A higher level of business investment generally indicates a stronger economy, which can lead to increased employment levels.</p></li>
+<li><p>Trade balance: The trade balance measures the difference between the value of a country’s exports and imports. A trade deficit (where imports exceed exports) can create job losses in certain industries, while a trade surplus (where exports exceed imports) can create job gains in certain industries.</p></li>
+<li><p>Interest rates: Interest rates can influence the availability of credit for businesses and individuals, which can impact investment and spending decisions. Higher interest rates can make borrowing more expensive, which can reduce business investment and consumer spending, potentially leading to job losses. Conversely, lower interest rates can stimulate borrowing, investment, and spending, potentially creating new job opportunities.</p></li>
+</ol>
+<p>After literature review of what quantitative factor would influence the US employment, I decided to use interest rates and GDP as exogenous variables and the employment as response variable to fit an ARIMAX model.</p>
+</section>
+<section id="plot-the-original-data" class="level2">
+<h2 class="anchored" data-anchor-id="plot-the-original-data">Plot the Original Data</h2>
+<div class="cell">
+
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<thead>
+<tr class="header">
+<th style="text-align: left;">DATE</th>
+<th style="text-align: right;">GDP</th>
+<th style="text-align: right;">Information Employment</th>
+<th style="text-align: right;">Interest Rate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">2003-04-01</td>
+<td style="text-align: right;">11312.77</td>
+<td style="text-align: right;">3208</td>
+<td style="text-align: right;">1.309619</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2003-07-01</td>
+<td style="text-align: right;">11566.67</td>
+<td style="text-align: right;">3176</td>
+<td style="text-align: right;">1.128689</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2003-10-01</td>
+<td style="text-align: right;">11772.23</td>
+<td style="text-align: right;">3155</td>
+<td style="text-align: right;">1.380819</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2004-01-01</td>
+<td style="text-align: right;">11923.45</td>
+<td style="text-align: right;">3141</td>
+<td style="text-align: right;">1.701954</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2004-04-01</td>
+<td style="text-align: right;">12112.82</td>
+<td style="text-align: right;">3130</td>
+<td style="text-align: right;">1.358149</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2004-07-01</td>
+<td style="text-align: right;">12305.31</td>
+<td style="text-align: right;">3124</td>
+<td style="text-align: right;">1.933799</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="arimax_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="fit-the-model-using-auto.arima" class="level2">
+<h2 class="anchored" data-anchor-id="fit-the-model-using-auto.arima">Fit the model using ’auto.arima()`</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Series: dd.ts[, "Information Employment"] 
+Regression with ARIMA(0,0,2)(0,0,2)[4] errors 
+
+Coefficients:
+         ma1     ma2    sma1    sma2  intercept     gdp       ir
+      1.0963  0.5950  0.3649  0.4137  2683.1158  0.0080  71.3895
+s.e.  0.1244  0.1404  0.1764  0.1813   116.2887  0.0067  18.2169
+
+sigma^2 = 2856:  log likelihood = -424.55
+AIC=865.09   AICc=867.15   BIC=884.05
+
+Training set error measures:
+                    ME    RMSE      MAE        MPE     MAPE     MASE      ACF1
+Training set -4.327941 51.0189 36.15202 -0.2118286 1.263825 0.524652 0.1997643</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="arimax_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Ljung-Box test
+
+data:  Residuals from Regression with ARIMA(0,0,2)(0,0,2)[4] errors
+Q* = 25.63, df = 4, p-value = 3.757e-05
+
+Model df: 4.   Total lags used: 8</code></pre>
+</div>
+</div>
+</section>
+<section id="fit-the-model-manually" class="level2">
+<h2 class="anchored" data-anchor-id="fit-the-model-manually">Fit the model manually</h2>
+<section id="first-fit-the-linear-model" class="level3">
+<h3 class="anchored" data-anchor-id="first-fit-the-linear-model">First fit the linear model:</h3>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = `Information Employment` ~ GDP + `Interest Rate`, 
+    data = dd)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-208.26  -72.25  -24.87   58.45  310.97 
+
+Coefficients:
+                 Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)     2.574e+03  8.058e+01  31.949  &lt; 2e-16 ***
+GDP             6.884e-03  3.937e-03   1.749   0.0844 .  
+`Interest Rate` 1.870e+02  2.035e+01   9.188 5.82e-14 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 108.1 on 76 degrees of freedom
+Multiple R-squared:  0.5658,    Adjusted R-squared:  0.5544 
+F-statistic: 49.52 on 2 and 76 DF,  p-value: 1.703e-14</code></pre>
+</div>
+</div>
+</section>
+<section id="then-look-at-the-residuals" class="level3">
+<h3 class="anchored" data-anchor-id="then-look-at-the-residuals">Then, look at the residuals</h3>
+<section id="without-difference" class="level4">
+<h4 class="anchored" data-anchor-id="without-difference">Without Difference</h4>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="arimax_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="ordinary-difference" class="level4">
+<h4 class="anchored" data-anchor-id="ordinary-difference">Ordinary Difference</h4>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="arimax_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="ordinary-difference-seasonal-difference" class="level4">
+<h4 class="anchored" data-anchor-id="ordinary-difference-seasonal-difference">Ordinary Difference &amp; Seasonal Difference</h4>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="arimax_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="find-the-model-parameters." class="level3">
+<h3 class="anchored" data-anchor-id="find-the-model-parameters.">Find the model parameters.</h3>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>    p  d  q  P  D  Q      AIC      BIC     AICc
+1   0  0  0  0  1  0 907.6150 909.9325 907.6698
+2   0  1  0  0  1  0 854.4312 856.7353 854.4868
+3   0  0  0  0  1  1 908.1850 912.8200 908.3517
+4   0  1  0  0  1  1 828.7371 833.3452 828.9061
+5   0  0  0  1  1  0 908.9794 913.6143 909.1460
+6   0  1  0  1  1  0 845.9064 850.5145 846.0754
+7   0  0  0  1  1  1 908.4592 915.4117 908.7972
+8   0  1  0  1  1  1 829.5965 836.5087 829.9394
+9   0  0  0  2  1  0 905.3131 912.2656 905.6511
+10  0  1  0  2  1  0 841.9095 848.8217 842.2523
+11  0  0  0  2  1  1 906.2281 915.4980 906.7995
+12  0  0  1  0  1  0 859.2117 863.8467 859.3783
+13  0  1  1  0  1  0 856.3489 860.9571 856.5180
+14  0  0  1  0  1  1 857.7835 864.7360 858.1215
+15  0  1  1  0  1  1 830.6975 837.6097 831.0404
+16  0  0  1  1  1  0 859.1153 866.0678 859.4534
+17  0  1  1  1  1  0 847.5417 854.4539 847.8845
+18  0  0  1  1  1  1 858.8497 868.1196 859.4211
+19  0  0  1  2  1  0 858.5823 867.8523 859.1538
+20  0  0  2  0  1  0 859.5802 866.5326 859.9182
+21  0  1  2  0  1  0 851.5891 858.5013 851.9320
+22  0  0  2  0  1  1 852.2051 861.4751 852.7766
+23  0  0  2  1  1  0 856.8211 866.0911 857.3926
+24  1  0  0  0  1  0 857.4716 862.1066 857.6383
+25  1  1  0  0  1  0 856.3631 860.9712 856.5321
+26  1  0  0  0  1  1 837.9940 844.9465 838.3321
+27  1  1  0  0  1  1 830.7120 837.6242 831.0548
+28  1  0  0  1  1  0 851.0912 858.0436 851.4292
+29  1  1  0  1  1  0 847.6911 854.6033 848.0339
+30  1  0  0  1  1  1 838.2652 847.5351 838.8366
+31  1  0  0  2  1  0 848.0331 857.3031 848.6045
+32  1  0  1  0  1  0 856.6924 863.6448 857.0304
+33  1  1  1  0  1  0 851.3537 858.2659 851.6965
+34  1  0  1  0  1  1 839.6227 848.8927 840.1942
+35  1  0  1  1  1  0 849.4077 858.6776 849.9791
+36  1  0  2  0  1  0 857.4344 866.7044 858.0058
+37  2  0  0  0  1  0 856.3557 863.3081 856.6937
+38  2  1  0  0  1  0 857.8814 864.7936 858.2242
+39  2  0  0  0  1  1 839.7839 849.0538 840.3553
+40  2  0  0  1  1  0 850.2682 859.5382 850.8396
+41  2  0  1  0  1  0 854.5722 863.8422 855.1436
+42 NA NA NA NA NA NA       NA       NA       NA</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>  p d q P D Q      AIC      BIC     AICc
+4 0 1 0 0 1 1 828.7371 833.3452 828.9061</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  p d q P D Q      AIC      BIC     AICc
+4 0 1 0 0 1 1 828.7371 833.3452 828.9061</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  p d q P D Q      AIC      BIC     AICc
+4 0 1 0 0 1 1 828.7371 833.3452 828.9061</code></pre>
+</div>
+</div>
+<p>Best models: SARIMA(0,1,0)x(0,1,1)[4], auto.arima suggested: SARIMA(0,0,2)(0,0,2)[4]</p>
+</section>
+</section>
+<section id="model-comparison" class="level2">
+<h2 class="anchored" data-anchor-id="model-comparison">Model Comparison</h2>
+<section id="model-diagnositic" class="level3">
+<h3 class="anchored" data-anchor-id="model-diagnositic">Model Diagnositic</h3>
+<section id="sarima010x0114-from-manual-fitting" class="level4">
+<h4 class="anchored" data-anchor-id="sarima010x0114-from-manual-fitting">SARIMA(0,1,0)x(0,1,1)[4] from Manual Fitting</h4>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="arimax_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="sarima002x0024-from-auto.arima" class="level4">
+<h4 class="anchored" data-anchor-id="sarima002x0024-from-auto.arima">SARIMA(0,0,2)x(0,0,2)[4] from <code>auto.arima()</code></h4>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="arimax_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>SARIMA(0,1,0)x(0,1,1)[4] is better</p>
+</section>
+</section>
+<section id="cross-validation" class="level3">
+<h3 class="anchored" data-anchor-id="cross-validation">Cross Validation</h3>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="arimax_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 40.92118 78.38342 72.35350 92.02167</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 49.26815 80.76242 96.15649 65.98401</code></pre>
+</div>
+</div>
+<p>SARIMA(0,1,0)x(0,1,1)[4] is better based on low RMSE</p>
+</section>
+</section>
+<section id="best-model-fitting" class="level2">
+<h2 class="anchored" data-anchor-id="best-model-fitting">Best Model Fitting</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Series: dd$`Information Employment` 
+Regression with ARIMA(0,1,0)(0,1,1)[4] errors 
+
+Coefficients:
+         sma1     gdp       ir
+      -0.8780  0.0777  17.9824
+s.e.   0.0932  0.0101  11.1088
+
+sigma^2 = 895.3:  log likelihood = -357.88
+AIC=723.76   AICc=724.34   BIC=732.98
+
+Training set error measures:
+                   ME    RMSE      MAE      MPE      MAPE      MASE      ACF1
+Training set 6.463512 28.3659 18.21201 0.219529 0.6487785 0.2642997 0.1028286</code></pre>
+</div>
+</div>
+</section>
+<section id="forcast" class="level2">
+<h2 class="anchored" data-anchor-id="forcast">Forcast</h2>
+<section id="use-auto.arima-to-forcast-the-exogenous-variables" class="level3">
+<h3 class="anchored" data-anchor-id="use-auto.arima-to-forcast-the-exogenous-variables">Use <code>auto.arima()</code> to forcast the exogenous variables</h3>
+<section id="gdp" class="level4">
+<h4 class="anchored" data-anchor-id="gdp">GDP</h4>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Series: dd$GDP 
+ARIMA(0,1,0) with drift 
+
+Coefficients:
+         drift
+      190.0670
+s.e.   38.1874
+
+sigma^2 = 115225:  log likelihood = -564.7
+AIC=1133.41   AICc=1133.57   BIC=1138.12
+
+Training set error measures:
+                    ME     RMSE      MAE         MPE      MAPE      MASE
+Training set 0.1407936 335.1231 148.3509 -0.08681734 0.7823694 0.1808457
+                  ACF1
+Training set -0.090376</code></pre>
+</div>
+</div>
+</section>
+<section id="interest-rate" class="level4">
+<h4 class="anchored" data-anchor-id="interest-rate">Interest Rate</h4>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Series: dd$`Interest Rate` 
+ARIMA(0,1,0) 
+
+sigma^2 = 0.08934:  log likelihood = -16.48
+AIC=34.96   AICc=35.02   BIC=37.32
+
+Training set error measures:
+                      ME     RMSE       MAE      MPE     MAPE      MASE
+Training set 0.006190167 0.297008 0.2344719 15.76077 62.29658 0.5345643
+                     ACF1
+Training set -0.008739477</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="forecast-with-exogenous-variables" class="level3">
+<h3 class="anchored" data-anchor-id="forecast-with-exogenous-variables">Forecast with exogenous variables</h3>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="arimax_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="results-and-findings" class="level2">
+<h2 class="anchored" data-anchor-id="results-and-findings">Results and Findings</h2>
+<p>We could observe that SARIMA and SARIMAX models give us similar trajectory. When the exogenous variable is included, we have a tight confidence interval. That means the SARIMAX model is more precise.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

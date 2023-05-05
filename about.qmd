@@ -1,0 +1,9 @@
+---
+title: "About Me"
+---
+
+Hi guys! My name is Yujie Chen (NetID: yc986). I'm currently pursuing my Master's degree in Data Science and Analytics at Georgetown University. I graduated with a bachelor's degree with a major in Physical Oceanography. Outside of Data Science I love sports - swimming, running, climbing, and biking
+
+::: {style="text-align:center"}
+![](IMG_6402.JPG)
+:::

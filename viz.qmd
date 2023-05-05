@@ -1,0 +1,125 @@
+---
+title: "Data Visualization"
+format: html
+---
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(forecast)
+library(astsa) 
+library(xts)
+library(tseries)
+library(fpp2)
+library(fma)
+library(lubridate)
+library(tidyverse)
+library(TSstudio)
+library(quantmod)
+library(tidyquant)
+library(plotly)
+library(ggplot2)
+library(readxl)
+```
+
+## Employment:
+
+```{r echo=FALSE, message=FALSE}
+library(tidyverse)
+ts_emp <- read_excel("data/employment.xlsx")
+```
+
+```{r echo=FALSE, message=FALSE}
+library(plotly)
+# Viz
+fig <- plot_ly(ts_emp, x = ~Month, y = ~`Mining and logging`, type = 'scatter', mode = 'lines', name = 'Mining and logging')
+fig <- fig %>% add_trace(y = ~`Construction`, name = 'Construction')
+fig <- fig %>% add_trace(y = ~`Manufacturing`, name = 'Manufacturing')
+fig <- fig %>% add_trace(y = ~`Wholesale trade`, name = 'Wholesale trade')
+fig <- fig %>% add_trace(y = ~`Retail trade`, name = 'Retail trade')
+fig <- fig %>% add_trace(y = ~`Transportation and warehousing`, name = 'Transportation and warehousing')
+fig <- fig %>% add_trace(y = ~`Utilities`, name = 'Utilities')
+fig <- fig %>% add_trace(y = ~`Information`, name = 'Information')
+fig <- fig %>% add_trace(y = ~`Financial activities`, name = 'Financial activities')
+fig <- fig %>% add_trace(y = ~`Professional and business services`, name = 'Professional and business services')
+fig <- fig %>% add_trace(y = ~`Private education and health services`, name = 'Private education and health services')
+fig <- fig %>% add_trace(y = ~`Leisure and hospitality`, name = 'Leisure and hospitality')
+fig <- fig %>% add_trace(y = ~`Other services`, name = 'Other services')
+fig <- fig %>% add_trace(y = ~`Government`, name = 'Government')
+fig <- fig %>% 
+  layout(hovermode = "x",
+         title = '<b> U.S Employment by Industry from 2003 to 2023 <b>',
+         yaxis = list(title = 'Employment'),
+         legend=list(title=list(text='')))
+         #xaxis = list(title = '',
+         #             tickformat="%b\n%Y",
+         #             ticklabelmode="period",
+         #             tickvals=list("2004-01-01", "2006-01-01", "2008-01-01", "2010-01-01", "2012-01-01", "2014-01-01", "2016-01-01", "2018-01-01", "2020-01-01", "2022-01-01")))
+fig
+```
+
+Between 2003 and 2023, the US labor market experienced both periods of growth and contraction, with employment trends varying widely across different industries. Here is a brief overview of the employment trends in some of the major industries in the US during this time period:
+
+Healthcare and Social Assistance: The healthcare and social assistance industry has consistently been one of the fastest-growing sectors of the US economy over the past two decades. Employment in this industry has grown steadily since 2003, and is projected to continue to grow at a faster rate than most other industries through 2023.
+
+Professional and Business Services: This industry includes a wide range of occupations such as accounting, legal services, and management consulting. Employment in this sector has also grown steadily since 2003, and is expected to continue to do so through 2023.
+
+Manufacturing: The manufacturing industry has experienced significant fluctuations in employment over the past two decades. Between 2003 and 2009, employment in manufacturing declined sharply, due in part to increased automation and offshoring of jobs. However, since 2010, employment in this sector has rebounded somewhat, with modest growth projected through 2023.
+
+Retail Trade: Employment in the retail trade sector has been more volatile than most other industries over the past two decades. Between 2003 and 2009, employment in this sector grew steadily, but since then has declined somewhat due to increased competition from online retailers and changing consumer preferences. Despite this, retail trade remains a major employer in the US, and is projected to continue to employ a large number of workers through 2023.
+
+Financial Activities: This industry includes banking, insurance, and other financial services. Employment in this sector has fluctuated somewhat over the past two decades, with declines during the financial crisis of 2008-2009, followed by modest growth since then. Employment in financial activities is expected to continue to grow at a moderate pace through 2023.
+
+## GDP
+
+```{r echo=FALSE, message=FALSE}
+gdp <- read.csv('data/GDP.csv')
+ir <- read_csv("data/REAINTRATREARAT10Y.csv")
+```
+
+```{r echo=FALSE, message=FALSE}
+fig <- plot_ly(gdp %>% mutate(DATE = as.Date(DATE)), x = ~DATE, y = ~`GDP`, type = 'scatter', mode = 'lines', name = 'GDP')
+fig <- fig %>% 
+  layout(hovermode = "x",
+         title = '<b> U.S GDP (2003-2022) <b>',
+         #yaxis = list(title = 'Employment'),
+         legend=list(title=list(text='')))
+         #xaxis = list(title = '',
+         #             tickformat="%b\n%Y",
+         #             ticklabelmode="period",
+         #             tickvals=list("2004-01-01", "2006-01-01", "2008-01-01", "2010-01-01", "2012-01-01", "2014-01-01", "2016-01-01", "2018-01-01", "2020-01-01", "2022-01-01")))
+fig
+```
+
+Between 2003 and 2022, the US economy experienced both periods of growth and contraction. The period from 2003 to 2007 saw a steady increase in GDP, with an average annual growth rate of 2.6%. However, the global financial crisis of 2008-2009 caused a sharp decline in economic activity, with GDP falling by 2.8% in 2009.
+
+The US economy recovered slowly in the years that followed, with GDP growth averaging 1.8% per year from 2010 to 2019. However, the COVID-19 pandemic in 2020 caused a severe contraction in economic activity, with GDP falling by a record 3.5% in 2020. The US economy has since begun to recover, with GDP growth of 5.7% in the third quarter of 2021.
+
+Throughout this period, the US economy has been driven by a variety of factors, including changes in consumer spending, business investment, government spending, and international trade. Additionally, the growth of industries such as technology, healthcare, and energy has played a significant role in shaping the US economy over the past two decades.
+
+
+## Interest Rate
+
+```{r echo=FALSE, message=FALSE}
+fig <- plot_ly(ir %>% mutate(DATE = as.Date(DATE)), x = ~DATE, y = ~`REAINTRATREARAT10Y`, type = 'scatter', mode = 'lines', name = 'Interest Rate')
+fig <- fig %>% 
+  layout(hovermode = "x",
+         title = '<b> U.S Interest Rate (1982-2020) <b>',
+         yaxis = list(title = 'Interst Rate'),
+         legend=list(title=list(text='')))
+         #xaxis = list(title = '',
+         #             tickformat="%b\n%Y",
+         #             ticklabelmode="period",
+         #             tickvals=list("2004-01-01", "2006-01-01", "2008-01-01", "2010-01-01", "2012-01-01", "2014-01-01", "2016-01-01", "2018-01-01", "2020-01-01", "2022-01-01")))
+fig
+```
+
+Between 1987 and 2020, the US economy experienced both high and low-interest rates, with periods of stability and volatility. During the late 1980s and early 1990s, interest rates were generally high, with the federal funds rate reaching a peak of 9.75% in May 1989.
+
+In the mid to late 1990s, interest rates began to decline, with the federal funds rate reaching a low of 1% in June 2003. This period of low-interest rates continued until the mid-2000s, when rates began to rise again, reaching a peak of 5.25% in June 2006.
+
+The global financial crisis of 2008-2009 caused a sharp decline in interest rates, with the federal funds rate falling to near-zero levels in December 2008. Interest rates remained low throughout the 2010s, with the federal funds rate hovering between 0% and 0.25% for much of the decade.
+
+In 2015, the Federal Reserve began a process of gradual interest rate hikes, raising the federal funds rate to a peak of 2.5% in December 2018. However, in response to slowing economic growth and rising trade tensions, the Federal Reserve began to lower interest rates again in 2019, with the federal funds rate falling to a range of 1.50% to 1.75% by the end of the year.
+
+In 2020, the COVID-19 pandemic caused a sharp decline in economic activity and led to a further reduction in interest rates. The Federal Reserve cut interest rates to near-zero levels and launched a series of monetary policy measures to support the economy, including quantitative easing and lending programs for businesses and local governments.

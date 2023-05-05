@@ -1,0 +1,130 @@
+---
+title: "Financial Time Series Models"
+format: html
+---
+
+```{r ,echo=FALSE, message=FALSE, warning=FALSE}
+library(flipbookr)
+library(tidyverse)
+library(ggplot2)
+library(forecast)
+library(astsa) 
+library(xts)
+library(tseries)
+library(fpp2)
+library(fma)
+library(lubridate)
+library(tidyverse)
+library(TSstudio)
+library(quantmod)
+library(tidyquant)
+library(plotly)
+library(ggplot2)
+library(FinTS)
+library(fGarch)
+```
+
+```{r echo=FALSE}
+
+options("getSymbols.warning4.0"=FALSE)
+options("getSymbols.yahoo.warning"=FALSE)
+
+tickers = c("JPM")
+for (i in tickers){
+  getSymbols(i,
+             from = "2012-10-01",
+             to = "2022-12-01")}
+
+x <- list(
+  title = "date"
+)
+y <- list(
+  title = "value"
+)
+
+stock <- data.frame(JPM)
+stock <- data.frame(stock,rownames(stock))
+stock$date <- as.Date(stock$rownames.stock.,"%Y-%m-%d")
+tail(stock)
+```
+
+```{r}
+stock$date=as.factor(stock$date)
+fin=ts(stock$JPM.Adjusted,
+            start = decimal_date(as.Date("2012-10-01")),
+            frequency = 365.25)
+str(fin)
+autoplot(fin, main = "Time Series Plot for JPM Stock(2012-2022)")
+```
+
+```{r}
+log_jpm = log(fin)
+returns = diff(log_jpm)
+par(mfrow = c(3,1))
+plot(returns , col = 'darkgreen', 
+     main = 'log return of JPM Closing Price',
+     ylab='Closing Price', xlab='Date')
+acf(returns, col ="darkgreen")
+pacf(returns,col = "darkgreen")
+
+
+```
+
+```{r}
+adf.test(returns)
+```
+
+```{r}
+arima <- Arima(returns,order=c(1,0,0))
+summary(arima) 
+```
+
+```{r}
+auto.arima(returns) #ARIMA(1,0,0)
+```
+
+```{r}
+sarima(returns,1,0,0)
+```
+
+```{r}
+res = arima$residuals
+
+#ARCH test on residual
+ArchTestRes <- as.character(ArchTest(res)$p.value)
+names(ArchTestRes)<- "JPM"
+ArchTestRes
+
+```
+
+Because the p-value is less than 0.05, meaning that we need some other model to fit it since there is ARCH effect in the residuals for the ARMA model.
+
+```{r}
+plot(res^2,main = "Squared Residual") 
+par(mfrow=c(2,1))
+acf(res^2) # q = 1
+pacf(res^2) # p = 1，2
+```
+
+```{r}
+garch.fit1 <- garchFit(formula = ~arma(1,0) + garch(2,1), data = returns, trace=F)
+summary(garch.fit1)
+```
+
+```{r}
+garch.fit2 <- garchFit(formula = ~arma(1,0) + garch(1,1), data = returns, trace=F)
+summary(garch.fit2)
+
+```
+
+Because the AIC and BIC of fit2 is lower than that of fit1, so we say the second model performs better, which is arma(1,0) + garch(1,1).
+
+## Summary
+
+After analysis, we fitted an ARMA(1,0)+GARCH(1,1) model for the returns of JPM stock. According to Ljung-Box test, all p-value are greater than 0.05, meaning that there is no correlation left in the residuals so we can say that the model fitted well.
+
+ϕ(B)x_t=δ+θ(B)y_t
+
+ϕ(B)=1−0.003B
+
+var(y_t\|y_t−1) = σ\^2 = 4.19×10\^-5 + 0.16(y\_{t−1})\^2 + 0.74σ\^2\_{t_1}
