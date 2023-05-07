@@ -1,7 +1,9 @@
 ---
-title: "Financial Time Series Models"
+title: "Financial Time Series Models (ARCH/GARCH)"
 format: html
 ---
+
+## Original Data Visualization
 
 ```{r ,echo=FALSE, message=FALSE, warning=FALSE}
 library(flipbookr)
@@ -48,7 +50,7 @@ stock$date <- as.Date(stock$rownames.stock.,"%Y-%m-%d")
 tail(stock)
 ```
 
-```{r}
+```{r echo=FALSE, message=FALSE}
 stock$date=as.factor(stock$date)
 fin=ts(stock$JPM.Adjusted,
             start = decimal_date(as.Date("2012-10-01")),
@@ -57,7 +59,17 @@ str(fin)
 autoplot(fin, main = "Time Series Plot for JPM Stock(2012-2022)")
 ```
 
-```{r}
+Looking at JP Morgan's stock price from 2012 to 2020, we can see that it experienced significant fluctuations in both its stationarity and volatility.
+
+During this period, JP Morgan's stock price generally trended upwards, but there were several instances of major market disruptions that caused significant declines in the stock's value. For example, in early 2016, concerns about a potential recession caused the stock price to drop by around 20% in just a few months. Similarly, in early 2020, the COVID-19 pandemic caused widespread market turmoil, resulting in a nearly 40% drop in the stock's value over a period of just a few weeks.
+
+In terms of stationarity, the mean and variance of JP Morgan's daily returns showed some evidence of non-stationarity during this period. There were several instances where the mean return varied significantly, indicating a lack of stationarity in the stock's behavior. Additionally, the variance of the daily returns was generally higher during periods of market volatility, such as during the 2016 and 2020 market disruptions.
+
+Overall, JP Morgan's stock price from 2012 to 2020 exhibited both stationarity and volatility, with significant fluctuations in both properties over time.
+
+## Model Fitting
+
+```{r echo=FALSE, message=FALSE}
 log_jpm = log(fin)
 returns = diff(log_jpm)
 par(mfrow = c(3,1))
@@ -70,24 +82,24 @@ pacf(returns,col = "darkgreen")
 
 ```
 
-```{r}
+```{r echo=FALSE, message=FALSE}
 adf.test(returns)
 ```
 
-```{r}
+```{r echo=FALSE, message=FALSE}
 arima <- Arima(returns,order=c(1,0,0))
 summary(arima) 
 ```
 
-```{r}
+```{r echo=FALSE, message=FALSE}
 auto.arima(returns) #ARIMA(1,0,0)
 ```
 
-```{r}
+```{r echo=FALSE, message=FALSE}
 sarima(returns,1,0,0)
 ```
 
-```{r}
+```{r echo=FALSE, message=FALSE}
 res = arima$residuals
 
 #ARCH test on residual
@@ -99,19 +111,21 @@ ArchTestRes
 
 Because the p-value is less than 0.05, meaning that we need some other model to fit it since there is ARCH effect in the residuals for the ARMA model.
 
-```{r}
+## Additional Model Fitting
+
+```{r echo=FALSE, message=FALSE}
 plot(res^2,main = "Squared Residual") 
 par(mfrow=c(2,1))
 acf(res^2) # q = 1
 pacf(res^2) # p = 1，2
 ```
 
-```{r}
+```{r echo=FALSE, message=FALSE}
 garch.fit1 <- garchFit(formula = ~arma(1,0) + garch(2,1), data = returns, trace=F)
 summary(garch.fit1)
 ```
 
-```{r}
+```{r echo=FALSE, message=FALSE}
 garch.fit2 <- garchFit(formula = ~arma(1,0) + garch(1,1), data = returns, trace=F)
 summary(garch.fit2)
 
@@ -128,3 +142,7 @@ After analysis, we fitted an ARMA(1,0)+GARCH(1,1) model for the returns of JPM s
 ϕ(B)=1−0.003B
 
 var(y_t\|y_t−1) = σ\^2 = 4.19×10\^-5 + 0.16(y\_{t−1})\^2 + 0.74σ\^2\_{t_1}
+
+## Source Code
+
+[Github](https://github.com/YujieChen20/Time-Series/blob/main/financial.qmd)

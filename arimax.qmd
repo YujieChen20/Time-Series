@@ -1,5 +1,5 @@
 ---
-title: "SARIMAX"
+title: "ARIMAX/SARIMAX/VAR"
 format: html
 ---
 
@@ -261,6 +261,10 @@ fit <- Arima(dd$`Information Employment`, order=c(0,1,0),seasonal = c(0, 1,1),xr
 summary(fit)
 ```
 
+#### Equation:
+
+$$Employment = 0.0777*GDP + 17.9824*Interest\, Rate + u_t$$ $$u_t = (1 - 0.878B^4) \varepsilon_t$$
+
 ## Forcast
 
 ### Use `auto.arima()` to forcast the exogenous variables
@@ -296,3 +300,7 @@ autoplot(fcast) +
 ## Results and Findings
 
 We could observe that SARIMA and SARIMAX models give us similar trajectory. When the exogenous variable is included, we have a tight confidence interval. That means the SARIMAX model is more precise.
+
+## Source Code
+
+[Github](https://github.com/YujieChen20/Time-Series/blob/main/arimax.qmd)

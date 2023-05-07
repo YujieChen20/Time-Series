@@ -126,7 +126,7 @@ $$x_t = 2.24x_{t-1} - 0.73x_{t-2} - 1.27x_{t-3} + 0.76x_{t-4} + w_t - 2.96w_{t-1
 model_output <- capture.output(sarima(emp_ts, 1, 1, 1))
 ```
 
-From the model diagnostic chart above, we can observe that the standardized residuals are similar to white noise, except there's a huge drop in employment during 2020. Also, both the p-value for Ljung-Box statistics and the ACF of residuals all falls within the confidence interval. We could say that the ARIMA(1, 1, 1) model fits the data set well!
+From the model diagnostic chart above, we can observe that the standardized residuals are similar to white noise, both the residual plot and Q-Q plot suggests the residuals of the fitted model are normally distributed. Also, both the p-value for Ljung-Box statistics and the ACF of residuals all falls within the confidence interval. We could say that the ARIMA(1, 1, 1) model fits the data set well!
 
 ## auto.arima
 
@@ -325,3 +325,7 @@ for(i in 1:((n-k)/12)){
 plot(1:12, colMeans(mae,na.rm=TRUE), type="l", col=2, xlab="horizon", ylab="MAE")
 legend("topleft",legend=c("SARIMA(0,1,0)x(1,1,1)"), col=2:4, lty=1)
 ```
+
+## Source Code:
+
+[Github](https://github.com/YujieChen20/Time-Series/blob/main/models.qmd)

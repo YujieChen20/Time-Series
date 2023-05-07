@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Time Series - SARIMAX</title>
+<title>IMPACT OF MACROECONOMIC FACTORS ON EMPLOYMENT MARKET - ARIMAX/SARIMAX/VAR</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -59,11 +59,12 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-sidebar docked nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -71,67 +72,90 @@ ul.task-list li input[type="checkbox"] {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">Time Series</span>
+    <span class="navbar-title">IMPACT OF MACROECONOMIC FACTORS ON EMPLOYMENT MARKET</span>
     </a>
   </div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-  <span class="navbar-toggler-icon"></span>
-</button>
-          <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav navbar-nav-scroll me-auto">
-  <li class="nav-item">
-    <a class="nav-link" href="./index.html">
- <span class="menu-text">Home</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./about.html">
- <span class="menu-text">About Yujie</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./introduction.html">
- <span class="menu-text">Introduction</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./sources.html">
- <span class="menu-text">Data Sources</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./viz.html">
- <span class="menu-text">Data Visualization</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./eda.html">
- <span class="menu-text">Exploratory Data Analysis</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./models.html">
- <span class="menu-text">ARMA/ARIMA/SARIMA Models</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link active" href="./arimax.html" aria-current="page">
- <span class="menu-text">SARIMAX</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./financial.html">
- <span class="menu-text">Financial Time Series Models</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./deepLearning.html">
- <span class="menu-text">Deep Learning for Time Series</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./conclusions.html">
- <span class="menu-text">Conclusions</span></a>
-  </li>  
-</ul>
-              <div id="quarto-search" class="" title="Search"></div>
-          </div> <!-- /navcollapse -->
+          <div id="quarto-search" class="" title="Search"></div>
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">ARIMAX/SARIMAX/VAR</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Home</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./about.html" class="sidebar-item-text sidebar-link">About Me</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./introduction.html" class="sidebar-item-text sidebar-link">Introduction</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./sources.html" class="sidebar-item-text sidebar-link">Data Sources</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./viz.html" class="sidebar-item-text sidebar-link">Data Visualization</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./eda.html" class="sidebar-item-text sidebar-link">Exploratory Data Analysis</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./models.html" class="sidebar-item-text sidebar-link">ARMA/ARIMA/SARIMA Models</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./arimax.html" class="sidebar-item-text sidebar-link active">ARIMAX/SARIMAX/VAR</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./financial.html" class="sidebar-item-text sidebar-link">Financial Time Series Models (ARCH/GARCH)</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./deepLearning.html" class="sidebar-item-text sidebar-link">Deep Learning for Time Series</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./conclusions.html" class="sidebar-item-text sidebar-link">Conclusions/Discussion</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
@@ -159,6 +183,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#forecast-with-exogenous-variables" id="toc-forecast-with-exogenous-variables" class="nav-link" data-scroll-target="#forecast-with-exogenous-variables">Forecast with exogenous variables</a></li>
   </ul></li>
   <li><a href="#results-and-findings" id="toc-results-and-findings" class="nav-link" data-scroll-target="#results-and-findings">Results and Findings</a></li>
+  <li><a href="#source-code" id="toc-source-code" class="nav-link" data-scroll-target="#source-code">Source Code</a></li>
   </ul>
 </nav>
     </div>
@@ -167,7 +192,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">SARIMAX</h1>
+<h1 class="title d-none d-lg-block">ARIMAX/SARIMAX/VAR</h1>
 </div>
 
 
@@ -479,6 +504,10 @@ Training set error measures:
 Training set 6.463512 28.3659 18.21201 0.219529 0.6487785 0.2642997 0.1028286</code></pre>
 </div>
 </div>
+<section id="equation" class="level4">
+<h4 class="anchored" data-anchor-id="equation">Equation:</h4>
+<p><span class="math display">\[Employment = 0.0777*GDP + 17.9824*Interest\, Rate + u_t\]</span> <span class="math display">\[u_t = (1 - 0.878B^4) \varepsilon_t\]</span></p>
+</section>
 </section>
 <section id="forcast" class="level2">
 <h2 class="anchored" data-anchor-id="forcast">Forcast</h2>
@@ -538,6 +567,10 @@ Training set -0.008739477</code></pre>
 <section id="results-and-findings" class="level2">
 <h2 class="anchored" data-anchor-id="results-and-findings">Results and Findings</h2>
 <p>We could observe that SARIMA and SARIMAX models give us similar trajectory. When the exogenous variable is included, we have a tight confidence interval. That means the SARIMAX model is more precise.</p>
+</section>
+<section id="source-code" class="level2">
+<h2 class="anchored" data-anchor-id="source-code">Source Code</h2>
+<p><a href="https://github.com/YujieChen20/Time-Series/blob/main/arimax.qmd">Github</a></p>
 
 
 </section>
@@ -677,6 +710,21 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">Copyright 2023, Yujie Chen</div>   
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/YujieChen20/Time-Series">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
 
 
 

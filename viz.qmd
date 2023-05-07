@@ -97,7 +97,6 @@ The US economy recovered slowly in the years that followed, with GDP growth aver
 
 Throughout this period, the US economy has been driven by a variety of factors, including changes in consumer spending, business investment, government spending, and international trade. Additionally, the growth of industries such as technology, healthcare, and energy has played a significant role in shaping the US economy over the past two decades.
 
-
 ## Interest Rate
 
 ```{r echo=FALSE, message=FALSE}
@@ -123,3 +122,7 @@ The global financial crisis of 2008-2009 caused a sharp decline in interest rate
 In 2015, the Federal Reserve began a process of gradual interest rate hikes, raising the federal funds rate to a peak of 2.5% in December 2018. However, in response to slowing economic growth and rising trade tensions, the Federal Reserve began to lower interest rates again in 2019, with the federal funds rate falling to a range of 1.50% to 1.75% by the end of the year.
 
 In 2020, the COVID-19 pandemic caused a sharp decline in economic activity and led to a further reduction in interest rates. The Federal Reserve cut interest rates to near-zero levels and launched a series of monetary policy measures to support the economy, including quantitative easing and lending programs for businesses and local governments.
+
+## Source Code
+
+[Github](https://github.com/YujieChen20/Time-Series/blob/main/viz.qmd)

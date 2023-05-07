@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Time Series - Exploratory Data Analysis</title>
+<title>IMPACT OF MACROECONOMIC FACTORS ON EMPLOYMENT MARKET - Exploratory Data Analysis</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -126,7 +126,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-sidebar docked nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -134,67 +134,90 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">Time Series</span>
+    <span class="navbar-title">IMPACT OF MACROECONOMIC FACTORS ON EMPLOYMENT MARKET</span>
     </a>
   </div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-  <span class="navbar-toggler-icon"></span>
-</button>
-          <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav navbar-nav-scroll me-auto">
-  <li class="nav-item">
-    <a class="nav-link" href="./index.html">
- <span class="menu-text">Home</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./about.html">
- <span class="menu-text">About Yujie</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./introduction.html">
- <span class="menu-text">Introduction</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./sources.html">
- <span class="menu-text">Data Sources</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./viz.html">
- <span class="menu-text">Data Visualization</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link active" href="./eda.html" aria-current="page">
- <span class="menu-text">Exploratory Data Analysis</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./models.html">
- <span class="menu-text">ARMA/ARIMA/SARIMA Models</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./arimax.html">
- <span class="menu-text">SARIMAX</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./financial.html">
- <span class="menu-text">Financial Time Series Models</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./deepLearning.html">
- <span class="menu-text">Deep Learning for Time Series</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./conclusions.html">
- <span class="menu-text">Conclusions</span></a>
-  </li>  
-</ul>
-              <div id="quarto-search" class="" title="Search"></div>
-          </div> <!-- /navcollapse -->
+          <div id="quarto-search" class="" title="Search"></div>
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Exploratory Data Analysis</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Home</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./about.html" class="sidebar-item-text sidebar-link">About Me</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./introduction.html" class="sidebar-item-text sidebar-link">Introduction</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./sources.html" class="sidebar-item-text sidebar-link">Data Sources</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./viz.html" class="sidebar-item-text sidebar-link">Data Visualization</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./eda.html" class="sidebar-item-text sidebar-link active">Exploratory Data Analysis</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./models.html" class="sidebar-item-text sidebar-link">ARMA/ARIMA/SARIMA Models</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./arimax.html" class="sidebar-item-text sidebar-link">ARIMAX/SARIMAX/VAR</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./financial.html" class="sidebar-item-text sidebar-link">Financial Time Series Models (ARCH/GARCH)</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./deepLearning.html" class="sidebar-item-text sidebar-link">Deep Learning for Time Series</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./conclusions.html" class="sidebar-item-text sidebar-link">Conclusions/Discussion</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
@@ -208,6 +231,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#augmented-dickey-fuller-test" id="toc-augmented-dickey-fuller-test" class="nav-link" data-scroll-target="#augmented-dickey-fuller-test">Augmented Dickey-Fuller Test</a></li>
   <li><a href="#make-data-stationary" id="toc-make-data-stationary" class="nav-link" data-scroll-target="#make-data-stationary">Make Data Stationary</a></li>
   <li><a href="#moving-average-smoothing" id="toc-moving-average-smoothing" class="nav-link" data-scroll-target="#moving-average-smoothing">Moving Average Smoothing</a></li>
+  <li><a href="#source-code" id="toc-source-code" class="nav-link" data-scroll-target="#source-code">Source Code</a></li>
   </ul>
 </nav>
     </div>
@@ -216,7 +240,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Exploratory Data Analysis</h1>
+<h1 class="title d-none d-lg-block">Exploratory Data Analysis</h1>
 </div>
 
 
@@ -306,17 +330,24 @@ alternative hypothesis: stationary</code></pre>
 <section id="moving-average-smoothing" class="level2">
 <h2 class="anchored" data-anchor-id="moving-average-smoothing">Moving Average Smoothing</h2>
 <div class="cell">
+<details>
+<summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(emp_ts) <span class="sc">+</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">autolayer</span>(<span class="fu">ma</span>(emp_ts,<span class="dv">12</span>), <span class="at">series=</span><span class="st">"12-MA"</span>) <span class="sc">+</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">autolayer</span>(<span class="fu">ma</span>(emp_ts,<span class="dv">36</span>), <span class="at">series=</span><span class="st">"36-MA"</span>) <span class="sc">+</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">autolayer</span>(<span class="fu">ma</span>(emp_ts,<span class="dv">120</span>), <span class="at">series=</span><span class="st">"120-MA"</span>) <span class="sc">+</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Date"</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"Employment"</span>) <span class="sc">+</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Moving Average Smoothing of U.S. Employment"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output-display">
 <p><img src="eda_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Using 12, 36, 120 MA window indicates there’s an upward trend in the NBA Web Search data set.</p>
+</section>
+<section id="source-code" class="level2">
+<h2 class="anchored" data-anchor-id="source-code">Source Code</h2>
+<p><a href="https://github.com/YujieChen20/Time-Series/blob/main/eda.qmd">Github</a></p>
 
 
 </section>
@@ -456,6 +487,21 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">Copyright 2023, Yujie Chen</div>   
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/YujieChen20/Time-Series">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
 
 
 

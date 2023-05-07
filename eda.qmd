@@ -139,3 +139,7 @@ autoplot(emp_ts) +
 ```
 
 Using 12, 36, 120 MA window indicates there's an upward trend in the NBA Web Search data set.
+
+## Source Code
+
+[Github](https://github.com/YujieChen20/Time-Series/blob/main/eda.qmd)
